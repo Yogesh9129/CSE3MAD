@@ -1,4 +1,4 @@
-package com.example.cse3mad_flashcards;
+package com.example.deckadence;
 
 import org.junit.Test;
 

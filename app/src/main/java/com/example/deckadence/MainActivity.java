@@ -3,9 +3,9 @@ package com.example.cse3mad_flashcards;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
+//import com.google.android.material.floatingactionbutton.FloatingActionButton;
+//import com.google.android.material.snackbar.Snackbar;
+//import com.google.android.material.tabs.TabLayout;
 
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +16,7 @@ import android.view.View;
 
 import com.example.cse3mad_flashcards.ui.main.SectionsPagerAdapter;
 import com.example.cse3mad_flashcards.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = binding.viewPager;
         viewPager.setAdapter(sectionsPagerAdapter);
-        TabLayout tabs = binding.tabs;
-        tabs.setupWithViewPager(viewPager);
+        //TabLayout tabs = binding.tabs;
+        //tabs.setupWithViewPager(viewPager);
     }
 }

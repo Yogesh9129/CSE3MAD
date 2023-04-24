@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "CSE3MAD_Flashcards"
+rootProject.name = "deckadence"
 include ':app'
