@@ -4,6 +4,7 @@ public class Flashcard {
     private String question, answer;
     // effectively measures how well the student understands the card.
     private int experience;
+    // maybe add a last used check? In the case of offline study across multiple devices
     public enum Level {
         EASY (20),
         GOOD (5),
