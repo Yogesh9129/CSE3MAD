@@ -1,4 +1,4 @@
-package com.example.cse3mad_flashcards;
+package com.example.deckadence;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,19 +8,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-//import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.firebase.auth.FirebaseAuth;
-
 public class LoginActivity extends AppCompatActivity {
     private TextView title;
     private EditText username;
     private EditText password;
     private Button googleLogin;
-
-    //GoogleSignInClient googleSignInClient;
-    GoogleSignInOptions googleSignInOptions;
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +20,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         // set up layout
         layoutSetup();
-        mAuth = FirebaseAuth.getInstance();
+        //mAuth = FirebaseAuth.getInstance();
     }
 
     private void layoutSetup() {

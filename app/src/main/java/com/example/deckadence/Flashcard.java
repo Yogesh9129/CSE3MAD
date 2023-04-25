@@ -1,4 +1,4 @@
-package com.example.cse3mad_flashcards;
+package com.example.deckadence;
 
 public class Flashcard {
     private String question, answer;
