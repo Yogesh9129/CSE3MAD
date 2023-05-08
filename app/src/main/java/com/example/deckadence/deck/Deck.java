@@ -1,22 +1,27 @@
-package com.example.deckadence;
+package com.example.deckadence.deck;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Deck {
     private ArrayList<Flashcard> cards;
-    private String name;
+    private String title;
+    private Date date;
 
-    public Deck(String name) {
-        this.name = name;
+    public Deck(String title) {
+        this.title = title;
         cards = new ArrayList<>();
+        date = new Date();
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
-
-    public void setName(String name) {
-        this.name = name;
+    public Date getLastStudiedDate(){
+        return date;
+    }
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     public void addCard(Flashcard card) {

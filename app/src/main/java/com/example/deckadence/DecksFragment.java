@@ -3,10 +3,20 @@ package com.example.deckadence;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.deckadence.deck.Deck;
+import com.example.deckadence.deck.DeckAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +33,11 @@ public class DecksFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private View view;
+    private DeckAdapter adapter;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference deckRef = db.collection("Decks");
 
     public DecksFragment() {
         // Required empty public constructor
@@ -59,6 +74,33 @@ public class DecksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_decks, container, false);
+        view = inflater.inflate(R.layout.fragment_decks, container, false);
+        setUpRecyclerView();
+        return view;
+    }
+
+    private void setUpRecyclerView() {
+        Query query = db.collection("Decks").orderBy("Title", Query.Direction.ASCENDING);
+        FirestoreRecyclerOptions<Deck> options = new FirestoreRecyclerOptions.Builder<Deck>()
+                .setQuery(query, Deck.class)
+                .build();
+        adapter = new DeckAdapter(options);
+        RecyclerView recyclerView = view.findViewById(R.id.rec_view);
+        // fragments don't work as context, go figure
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+        Log.d("deck","listening for changes");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }
