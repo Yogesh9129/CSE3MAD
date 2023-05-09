@@ -37,19 +37,19 @@
             style="?android:attr/buttonBarButtonStyle" />
 
         <Button
-            android:id="@+id/decks_button"
+            android:id="@+id/add_button"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/title_decks"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:text="@string/title_add" />
 
         <Button
-            android:id="@+id/settings_button"
+            android:id="@+id/decks_button"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/title_settings"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:text="@string/title_decks" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private void layoutSetup() {
         homeButton = (Button) findViewById(R.id.home_button);
         decksButton = (Button) findViewById(R.id.decks_button);
-        settingsButton = (Button) findViewById(R.id.settings_button);
+        settingsButton = (Button) findViewById(R.id.add_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.fragmentContainerView, SettingsFragment.class, null);
+                transaction.replace(R.id.fragmentContainerView, AddFragment.class, null);
                 transaction.commit();
             }
         });
