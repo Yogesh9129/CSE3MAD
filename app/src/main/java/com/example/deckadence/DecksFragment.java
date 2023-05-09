@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.deckadence.deck.Deck;
 import com.example.deckadence.deck.DeckAdapter;
@@ -31,6 +32,7 @@ public class DecksFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String TAG = "deck";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -86,27 +88,21 @@ public class DecksFragment extends Fragment {
 
     private void setUpRecyclerView() {
         account = GoogleSignIn.getLastSignedInAccount(getActivity());
-        boolean loggedIn;
+        String token = "";
         try {
-            loggedIn = account != null;
+            token = account.getIdToken();
         } catch (NullPointerException e) {
-            loggedIn = false;
+            // suppress
         }
-        if(loggedIn) {
-            // make a toast complaining about not being logged in;
-            return;
-        }
-        // TODO, filter to only decks created by a certain account
-        account.getIdToken();
-        Query query = db.collection("Decks").orderBy("Title", Query.Direction.ASCENDING);
+        Query query = db.collection("Decks").whereEqualTo("token", token).orderBy("Title", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Deck> options = new FirestoreRecyclerOptions.Builder<Deck>()
                 .setQuery(query, Deck.class)
                 .build();
         adapter = new DeckAdapter(options);
         RecyclerView recyclerView = view.findViewById(R.id.rec_view);
-        // fragments don't work as context, go figure
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+        Log.d(TAG,"recycler working");
         //note as we are not using up and down gestures the first argument is 0
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -117,7 +113,7 @@ public class DecksFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                adapter.deleteItem(viewHolder.getBindingAdapterPosition());
+                // not doing anything here, other ways to delete
             }
         }).attachToRecyclerView(recyclerView);
     }
@@ -126,7 +122,7 @@ public class DecksFragment extends Fragment {
     public void onStart() {
         super.onStart(); // call superclass method before anything else
         adapter.startListening();
-        Log.d("deck","listening for changes");
+        Log.d(TAG,"listening for changes");
     }
 
     @Override

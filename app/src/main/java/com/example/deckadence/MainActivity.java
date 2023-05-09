@@ -32,11 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         account = GoogleSignIn.getLastSignedInAccount(this);
-        try {
-            loggedIn = account != null;
-        } catch (NullPointerException e) {
-            loggedIn = false;
-        }
+        loggedIn = (account != null);
         if(!loggedIn) { // also check for internet maybe
             MainActivity.this.startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }

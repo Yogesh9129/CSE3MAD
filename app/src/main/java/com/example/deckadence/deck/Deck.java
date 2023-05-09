@@ -28,12 +28,15 @@ public class Deck {
     public void setTitle(String name) {
         this.title = name;
     }
+    public void setToken(String token) {
+        this.token = token;
+    }
+    public void setLastStudiedDate(Date date){
+        this.date = date;
+    }
 
     public void addCard(Flashcard card) {
         cards.add(card);
-    }
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public void removeCard(Flashcard card) {
