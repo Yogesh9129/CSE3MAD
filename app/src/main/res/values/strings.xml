@@ -11,4 +11,5 @@
     <string name="title_home">Home</string>
     <string name="title_decks">Decks</string>
     <string name="title_add">Add</string>
+    <string name="last_studied">Last Studied:</string>
 </resources>

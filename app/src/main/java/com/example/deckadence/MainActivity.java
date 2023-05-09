@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
@@ -20,8 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private boolean loggedIn;
-    private GoogleSignInOptions googleSignInOptions;
-    private GoogleSignInClient googleSignInClient;
+    private GoogleSignInAccount account;
     private Button homeButton;
     private Button decksButton;
     private Button settingsButton;
@@ -31,14 +31,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
-        // googleSignInClient is not null if logged in
-        try {
-            loggedIn = googleSignInClient != null;
-        } catch (NullPointerException e) {
-            loggedIn = false;
-        }
+        account = GoogleSignIn.getLastSignedInAccount(this);
+        loggedIn = (account != null);
         if(!loggedIn) { // also check for internet maybe
             MainActivity.this.startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }

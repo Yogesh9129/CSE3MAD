@@ -1,4 +1,4 @@
-package com.example.deckadence;
+package com.example.deckadence.deck;
 
 public class Flashcard {
     private String question, answer;
