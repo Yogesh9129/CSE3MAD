@@ -7,11 +7,13 @@ public class Deck {
     private ArrayList<Flashcard> cards;
     private String title;
     private Date date;
+    private String token;
 
     public Deck(String title) {
         this.title = title;
         cards = new ArrayList<>();
         date = new Date();
+        token = "";
     }
 
     public String getTitle() {
@@ -20,12 +22,18 @@ public class Deck {
     public Date getLastStudiedDate(){
         return date;
     }
+    public String getToken() {
+        return token;
+    }
     public void setTitle(String name) {
         this.title = name;
     }
 
     public void addCard(Flashcard card) {
         cards.add(card);
+    }
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void removeCard(Flashcard card) {

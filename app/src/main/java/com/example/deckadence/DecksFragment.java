@@ -2,7 +2,9 @@ package com.example.deckadence;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +16,8 @@ import android.view.ViewGroup;
 import com.example.deckadence.deck.Deck;
 import com.example.deckadence.deck.DeckAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -38,6 +42,7 @@ public class DecksFragment extends Fragment {
     private DeckAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference deckRef = db.collection("Decks");
+    private GoogleSignInAccount account;
 
     public DecksFragment() {
         // Required empty public constructor
@@ -80,6 +85,19 @@ public class DecksFragment extends Fragment {
     }
 
     private void setUpRecyclerView() {
+        account = GoogleSignIn.getLastSignedInAccount(getActivity());
+        boolean loggedIn;
+        try {
+            loggedIn = account != null;
+        } catch (NullPointerException e) {
+            loggedIn = false;
+        }
+        if(loggedIn) {
+            // make a toast complaining about not being logged in;
+            return;
+        }
+        // TODO, filter to only decks created by a certain account
+        account.getIdToken();
         Query query = db.collection("Decks").orderBy("Title", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Deck> options = new FirestoreRecyclerOptions.Builder<Deck>()
                 .setQuery(query, Deck.class)
@@ -87,20 +105,33 @@ public class DecksFragment extends Fragment {
         adapter = new DeckAdapter(options);
         RecyclerView recyclerView = view.findViewById(R.id.rec_view);
         // fragments don't work as context, go figure
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+        //note as we are not using up and down gestures the first argument is 0
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                adapter.deleteItem(viewHolder.getBindingAdapterPosition());
+            }
+        }).attachToRecyclerView(recyclerView);
     }
 
     @Override
     public void onStart() {
-        super.onStart();
+        super.onStart(); // call superclass method before anything else
         adapter.startListening();
         Log.d("deck","listening for changes");
     }
 
     @Override
     public void onStop() {
-        super.onStop();
+        super.onStop(); // call superclass method before anything else
         adapter.stopListening();
     }
 }

@@ -52,7 +52,7 @@ public class DeckAdapter extends FirestoreRecyclerAdapter<Deck,DeckAdapter.DeckH
                     // open deck
                 }
             });
-            // long click for rename deck popup maybe
+            // long click for deck menu popup (rename, add new card)
         }
     }
 }
