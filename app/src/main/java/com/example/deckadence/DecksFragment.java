@@ -19,6 +19,7 @@ import com.example.deckadence.deck.DeckAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -40,6 +41,7 @@ public class DecksFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
     private View view;
     private DeckAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -83,6 +85,7 @@ public class DecksFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_decks, container, false);
         setUpRecyclerView();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
         return view;
     }
 
@@ -98,7 +101,7 @@ public class DecksFragment extends Fragment {
         FirestoreRecyclerOptions<Deck> options = new FirestoreRecyclerOptions.Builder<Deck>()
                 .setQuery(query, Deck.class)
                 .build();
-        adapter = new DeckAdapter(options);
+        adapter = new DeckAdapter(options, getContext());
         RecyclerView recyclerView = view.findViewById(R.id.rec_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
