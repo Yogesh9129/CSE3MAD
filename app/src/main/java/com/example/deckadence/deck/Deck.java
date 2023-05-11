@@ -8,12 +8,14 @@ public class Deck {
     private String title;
     private Date date;
     private String token;
+    private int cardPointer;
 
     public Deck(String title) {
         this.title = title;
         cards = new ArrayList<>();
         date = new Date();
         token = "";
+        cardPointer = 0;
     }
 
     public String getTitle() {
@@ -34,15 +36,21 @@ public class Deck {
     public void setLastStudiedDate(Date date){
         this.date = date;
     }
-
     public void addCard(Flashcard card) {
         cards.add(card);
     }
-
     public void removeCard(Flashcard card) {
         cards.remove(card); // might be worth checking if the card was removed or not
     }
-
+    public int getCardCount() {
+        return cards.size();
+    }
+    public Flashcard getNextCard() {
+        Flashcard card = cards.get(cardPointer);
+        cardPointer++;
+        return card;
+    }
+    // functions for card searching
     public Flashcard getCardByQuestion(String question) {
         for (Flashcard card: cards) {
             if(card.getQuestion().equals(question)) {
