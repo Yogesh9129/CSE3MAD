@@ -19,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
     private boolean loggedIn;
     private GoogleSignInAccount account;
     private Button homeButton;
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         account = GoogleSignIn.getLastSignedInAccount(this);
+        db = FirebaseFirestore.getInstance();
         loggedIn = (account != null);
         if(!loggedIn) { // also check for internet maybe
             MainActivity.this.startActivity(new Intent(getApplicationContext(), LoginActivity.class));
