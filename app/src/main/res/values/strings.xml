@@ -12,4 +12,8 @@
     <string name="title_decks">Decks</string>
     <string name="title_add">Add</string>
     <string name="last_studied">Last Studied:</string>
+    <string name="title">title</string>
+    <string name="description">description</string>
+    <string name="add_deck">add_deck</string>
+    <string name="dekedence_logo">dekedence_logo</string>
 </resources>

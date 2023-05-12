@@ -8,9 +8,10 @@ public class Deck {
     private String title;
     private Date date;
     private String token;
-
-    public Deck(String title) {
+    private String description;
+    public Deck(String title, String description) {
         this.title = title;
+        this.description = description;
         cards = new ArrayList<>();
         date = new Date();
         token = "";
