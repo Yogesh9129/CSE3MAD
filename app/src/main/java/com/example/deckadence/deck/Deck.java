@@ -9,16 +9,21 @@ public class Deck {
     private Date date;
     private String token;
     private String description;
-    public Deck(String title, String description) {
+    public Deck(String title, String description, String token) {
         this.title = title;
         this.description = description;
         cards = new ArrayList<>();
         date = new Date();
-        token = "";
+        this.token = token;
+
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
     public Date getLastStudiedDate(){
         return date;

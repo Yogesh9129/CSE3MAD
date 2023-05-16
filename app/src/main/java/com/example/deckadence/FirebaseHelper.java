@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.deckadence.deck.Deck;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -18,6 +19,11 @@ public class FirebaseHelper {
         this.db = db;
     }
     // returns string array with deck title and description
+
+    public void addDeck(Deck deck) {
+        db.collection("Deck").document(deck.getTitle()).set(deck);
+        Log.d("DEBUG", "Added Deck");
+    }
     public String[] getDeckInfo(String deckID) {
         DocumentReference deckRef = db.collection("Deck").document(deckID);
         String[] returnArray = new String[2];
