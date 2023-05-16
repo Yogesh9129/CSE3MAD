@@ -17,15 +17,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class LoginActivity extends AppCompatActivity {
     //TODO, add anon login
     private GoogleSignInOptions googleSignInOptions;
     private GoogleSignInClient googleSignInClient;
+    private FirebaseAnalytics mFirebaseAnalytics;
     private TextView title;
-    //private EditText username;
-    //private EditText password;
-    //private Button login_button;
     private Button googleLogin;
 
     @Override
@@ -39,15 +38,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_login);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         // set up layout
         layoutSetup();
     }
 
     private void layoutSetup() {
         title = findViewById(R.id.deckadence_title);
-        //username = findViewById(R.id.username);
-        //password = findViewById(R.id.password);
-        //login_button = findViewById(R.id.login_button);
         googleLogin =  findViewById(R.id.login_with_google);
         googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
@@ -69,6 +66,13 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try{
                 task.getResult(ApiException.class);
+                // logs that the user signed in with Google
+                // this sort of analytics would be more useful with different login types
+                // like Apple or Facebook, but it's a start
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(R.id.login_with_google));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "login_with_google");
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
                 finish();
             } catch (ApiException e) {
                 // error should probably be more specific
