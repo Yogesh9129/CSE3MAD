@@ -1,5 +1,7 @@
 package com.example.deckadence.deck;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deckadence.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class DeckAdapter extends FirestoreRecyclerAdapter<Deck,DeckAdapter.DeckHolder> {
-    public DeckAdapter(@NonNull FirestoreRecyclerOptions<Deck> options) {
+    private Context context;
+    public DeckAdapter(@NonNull FirestoreRecyclerOptions<Deck> options, Context context) {
         super(options);
+        this.context = context;
     }
 
     @Override
@@ -27,7 +32,7 @@ public class DeckAdapter extends FirestoreRecyclerAdapter<Deck,DeckAdapter.DeckH
     @Override
     public DeckHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.deck_card, parent, false);
-        return new DeckHolder(v);
+        return new DeckHolder(v, context);
     }
 
     //must be public!!
@@ -36,19 +41,26 @@ public class DeckAdapter extends FirestoreRecyclerAdapter<Deck,DeckAdapter.DeckH
     }
     class DeckHolder extends RecyclerView.ViewHolder{
 
+        private FirebaseAnalytics mFirebaseAnalytics;
         TextView textViewTitle;
         TextView textViewLastStudied;
         TextView textViewLastStudiedDate;
 
-        public DeckHolder(@NonNull View itemView) {
+        public DeckHolder(@NonNull View itemView, Context context) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.rec_deck_title);
             textViewLastStudied = itemView.findViewById(R.id.rec_last_studied);
             textViewLastStudiedDate = itemView.findViewById(R.id.rec_last_studied_date);
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID,"0");
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "deck_card");
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "deck");
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle);
                     // open deck
                 }
             });
