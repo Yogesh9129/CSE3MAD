@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -45,29 +46,30 @@ public class MainActivity extends AppCompatActivity {
         homeButton = (Button) findViewById(R.id.home_button);
         decksButton = (Button) findViewById(R.id.decks_button);
         addButton = (Button) findViewById(R.id.add_button);
+        // default to home view
+        switchFragment(HomeFragment.class);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.fragmentContainerView, HomeFragment.class, null);
-                transaction.commit();
+                switchFragment(HomeFragment.class);
             }
         });
         decksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.fragmentContainerView, DecksFragment.class, null);
-                transaction.commit();
+                switchFragment(DecksFragment.class);
             }
         });
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.fragmentContainerView, AddFragment.class, null);
-                transaction.commit();
+                switchFragment(AddFragment.class);
             }
         });
+    }
+    public void switchFragment(Class<? extends Fragment> fragment) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainerView, fragment, null);
+        transaction.commit();
     }
 }
