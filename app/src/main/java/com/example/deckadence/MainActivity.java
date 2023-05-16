@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInAccount account;
     private Button homeButton;
     private Button decksButton;
-    private Button settingsButton;
+    private Button addButton;
     private FragmentManager fragmentManager;
 
 
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private void layoutSetup() {
         homeButton = (Button) findViewById(R.id.home_button);
         decksButton = (Button) findViewById(R.id.decks_button);
-        settingsButton = (Button) findViewById(R.id.add_button);
+        addButton = (Button) findViewById(R.id.add_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
-        settingsButton.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
