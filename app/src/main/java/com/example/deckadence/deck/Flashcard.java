@@ -5,16 +5,9 @@ public class Flashcard {
     // effectively measures how well the student understands the card.
     private int experience;
     // maybe add a last used check? In the case of offline study across multiple devices
-    public enum Level {
-        EASY (20),
-        GOOD (5),
-        AGAIN (-5);
-        private final int factor;
-        Level(int factor) {
-            this.factor = factor;
-        }
-        int getFactor() {return factor;}
-    }
+    public static final int EASY = 20;
+    public static final int GOOD = 5;
+    public static final int AGAIN = -5;
 
     public Flashcard(String question, String answer) {
         this.question = question;
@@ -38,8 +31,8 @@ public class Flashcard {
         return answer;
     }
 
-    public void answered(Level level) {
-        experience += level.getFactor();
+    public void answered(int exp) {
+        experience += exp;
         if(experience < 0) {
             experience = 0;
         }

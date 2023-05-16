@@ -94,7 +94,7 @@ public class DecksFragment extends Fragment {
         } catch (NullPointerException e) {
             // suppress
         }
-        Query query = db.collection("Decks").whereEqualTo("token", token).orderBy("Title", Query.Direction.ASCENDING);
+        Query query = db.collection("Deck").whereEqualTo("token", token).orderBy("Title", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Deck> options = new FirestoreRecyclerOptions.Builder<Deck>()
                 .setQuery(query, Deck.class)
                 .build();

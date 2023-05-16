@@ -1,5 +1,6 @@
 package com.example.deckadence.deck;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class DeckAdapter extends FirestoreRecyclerAdapter<Deck,DeckAdapter.DeckH
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // open deck
+                    Intent intent = new Intent();
                 }
             });
             // long click for deck menu popup (rename, add new card)
