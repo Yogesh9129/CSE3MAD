@@ -1,20 +1,19 @@
 package com.example.deckadence.deck;
 
-<<<<<<< HEAD
 import android.content.Intent;
-=======
 import android.content.Context;
 import android.os.Bundle;
->>>>>>> main
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deckadence.R;
+import com.example.deckadence.StudyActivity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -45,7 +44,7 @@ public class DeckAdapter extends FirestoreRecyclerAdapter<Deck,DeckAdapter.DeckH
     }
     class DeckHolder extends RecyclerView.ViewHolder{
 
-        private FirebaseAnalytics mFirebaseAnalytics;
+        private final FirebaseAnalytics mFirebaseAnalytics;
         TextView textViewTitle;
         TextView textViewLastStudied;
         TextView textViewLastStudiedDate;
@@ -66,7 +65,11 @@ public class DeckAdapter extends FirestoreRecyclerAdapter<Deck,DeckAdapter.DeckH
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "deck");
                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle);
                     // open deck
-					Intent intent = new Intent();
+					Intent intent = new Intent(context, StudyActivity.class);
+                    intent.putExtra("deckID","1");
+                    context.startActivity(intent);
+                    // should show up when study is finished
+                    Toast.makeText(context, "Study finished!", Toast.LENGTH_SHORT).show();
                 }
             });
             // long click for deck menu popup (rename, add new card)

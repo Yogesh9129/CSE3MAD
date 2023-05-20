@@ -10,12 +10,12 @@ import android.widget.TextView;
 
 import com.example.deckadence.deck.Deck;
 import com.example.deckadence.deck.Flashcard;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class StudyActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseHelper fh;
     private TextView question;
     private TextView answer;
     private Button revealButton;
@@ -29,14 +29,15 @@ public class StudyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study);
+        fh = new FirebaseHelper(db);
         Intent intent = getIntent();
         String deckID = intent.getStringExtra("deckID");
         // get the currently studied deck here
         // also get the current card too
-        String title, description;
-        DocumentReference deckRef = db.collection("Deck").document(deckID);
-        deckRef
-        deck = new Deck(title, description);
+        String[] deckInfo = fh.getDeckInfo(deckID);
+        deck = new Deck(deckInfo[0]);
+        Flashcard[] cards = fh.getDeckCards(deckID);
+        deck.addCards(cards);
         currentCard = deck.getNextCard();
         setupLayout();
     }
@@ -87,6 +88,9 @@ public class StudyActivity extends AppCompatActivity {
         // note, finish when deck is exhausted
         currentCard.answered(exp);
         currentCard = deck.getNextCard();
+        if(currentCard == null) {
+            finish();
+        }
         question.setText(currentCard.getQuestion());
         answer.setText(currentCard.getAnswer());
         answer.setVisibility(View.INVISIBLE);

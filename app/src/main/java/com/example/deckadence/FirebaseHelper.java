@@ -4,11 +4,16 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.deckadence.deck.Flashcard;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Objects;
 
 public class FirebaseHelper {
     private FirebaseFirestore db;
@@ -44,5 +49,23 @@ public class FirebaseHelper {
         } else {
             return null;
         }
+    }
+    public Flashcard[] getDeckCards(String deckID) {
+        db.collection("Deck")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+
+            return null;
     }
 }

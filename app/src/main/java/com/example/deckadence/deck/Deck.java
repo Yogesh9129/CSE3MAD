@@ -1,6 +1,7 @@
 package com.example.deckadence.deck;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class Deck {
@@ -41,6 +42,9 @@ public class Deck {
     }
     public void removeCard(Flashcard card) {
         cards.remove(card); // might be worth checking if the card was removed or not
+    }
+    public void addCards(Flashcard[] cardArray) {
+        cards.addAll(Arrays.asList(cardArray));
     }
     public int getCardCount() {
         return cards.size();
