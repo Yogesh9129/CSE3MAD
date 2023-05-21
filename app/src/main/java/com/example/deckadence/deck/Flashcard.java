@@ -3,18 +3,18 @@ package com.example.deckadence.deck;
 public class Flashcard {
     private String question, answer;
     // effectively measures how well the student understands the card.
-    private int experience;
+    private long experience;
     // maybe add a last used check? In the case of offline study across multiple devices
-    public static final int EASY = 20;
-    public static final int GOOD = 5;
-    public static final int AGAIN = -5;
+    public static final long EASY = 20;
+    public static final long GOOD = 5;
+    public static final long AGAIN = -5;
     public Flashcard() {
         // empty constructor for firebase
     }
-    public Flashcard(String question, String answer) {
+    public Flashcard(String question, String answer, long experience) {
         this.question = question;
         this.answer = answer;
-        experience = 0;
+        this.experience = experience;
     }
 
     public void setQuestion(String question) {
@@ -29,7 +29,7 @@ public class Flashcard {
         this.answer = answer;
     }
 
-    public int getExperience() {
+    public long getExperience() {
         return experience;
     }
 
@@ -41,7 +41,7 @@ public class Flashcard {
         return answer;
     }
 
-    public void answered(int exp) {
+    public void answered(long exp) {
         experience += exp;
         if(experience < 0) {
             experience = 0;

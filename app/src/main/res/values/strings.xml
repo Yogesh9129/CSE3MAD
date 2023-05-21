@@ -6,8 +6,6 @@
     <string name="password">Password</string>
     <string name="login_with_google">Login with Google</string>
     <string name="login">Login</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_home">Home</string>
     <string name="title_decks">Decks</string>
     <string name="title_add">Add</string>
@@ -15,7 +13,7 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="add_deck">Add Deck</string>
-    <string name="dekedence_logo">dekedence_logo</string>
+    <string name="dekedence_logo">Dekedence_logo</string>
     <string name="reveal_answer">Reveal Answer</string>
     <string name="again_answer">Again</string>
     <string name="good_answer">Good</string>
@@ -23,4 +21,5 @@
     <string name="add_card">Add Card</string>
     <string name="answer">Answer</string>
     <string name="question">Question</string>
+    <string name="waiting">Please wait a few seconds before answering</string>
 </resources>

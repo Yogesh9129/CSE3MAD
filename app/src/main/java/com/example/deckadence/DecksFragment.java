@@ -37,44 +37,20 @@ import com.google.firebase.firestore.Query;
  * create an instance of this fragment.
  */
 public class DecksFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String TAG = "deck";
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private FirebaseAnalytics mFirebaseAnalytics;
     private DeckAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference deckRef = db.collection("Decks");
     private GoogleSignInAccount account;
+    private View view;
     private DecksFragment.GoogleSignInInterface googleSignInInterface;
 
     public DecksFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DecksFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DecksFragment newInstance(String param1, String param2) {
-        DecksFragment fragment = new DecksFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static DecksFragment newInstance() {
+        return new DecksFragment();
     }
 
     @Override
@@ -91,10 +67,6 @@ public class DecksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -107,11 +79,12 @@ public class DecksFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setUpRecyclerView(view);
+        this.view = view;
+        setUpRecyclerView();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
     }
 
-    private void setUpRecyclerView(View view) {
+    private void setUpRecyclerView() {
         account = googleSignInInterface.getGoogleSignIn();
         String token = "";
         try {
@@ -130,6 +103,7 @@ public class DecksFragment extends Fragment {
         //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(null);
         Log.d(TAG,"recycler working");
         //note as we are not using up and down gestures the first argument is 0
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
@@ -153,6 +127,9 @@ public class DecksFragment extends Fragment {
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "deck_card");
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "deck");
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle);
+                Intent intent = new Intent(getContext(), StudyActivity.class);
+                intent.putExtra("deckID", documentSnapshot.getId());
+                getContext().startActivity(intent);
             }
         });
         adapter.setOnItemLongClickListener(new DeckAdapter.OnItemLongClickListener() {
@@ -171,7 +148,6 @@ public class DecksFragment extends Fragment {
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         AddCardFragment fragment = new AddCardFragment();
                         fragment.setArguments(bundle);
-                        fragmentTransaction.addToBackStack("xyz");
                         fragmentTransaction.hide(DecksFragment.this);
                         fragmentTransaction.add(android.R.id.content, fragment);
                         fragmentTransaction.commit();
@@ -182,6 +158,7 @@ public class DecksFragment extends Fragment {
                 popupMenu.show();
             }
         });
+        adapter.startListening();
     }
 
     @Override

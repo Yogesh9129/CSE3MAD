@@ -20,6 +20,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;;
 
 public class DeckAdapter extends FirestoreRecyclerAdapter<Deck,DeckAdapter.DeckHolder> {
+    private static final String TAG = "deck";
     private OnItemClickListener clickListener;
     private OnItemLongClickListener longClickListener;
     public DeckAdapter(@NonNull FirestoreRecyclerOptions<Deck> options) {
@@ -29,7 +30,7 @@ public class DeckAdapter extends FirestoreRecyclerAdapter<Deck,DeckAdapter.DeckH
     @Override
     protected void onBindViewHolder(@NonNull DeckHolder holder, int position, @NonNull Deck model) {
         holder.textViewTitle.setText(model.getTitle());
-        Log.d("deck", "Model " + model.toString());
+        Log.d(TAG, "Model " + model.toString());
         holder.textViewLastStudiedDate.setText(model.getDate());
     }
 
@@ -55,7 +56,7 @@ public class DeckAdapter extends FirestoreRecyclerAdapter<Deck,DeckAdapter.DeckH
             textViewTitle = itemView.findViewById(R.id.rec_deck_title);
             textViewLastStudied = itemView.findViewById(R.id.rec_last_studied);
             textViewLastStudiedDate = itemView.findViewById(R.id.rec_last_studied_date);
-            Log.d("deck","new holder");
+            Log.d(TAG,"new holder");
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -65,11 +66,6 @@ public class DeckAdapter extends FirestoreRecyclerAdapter<Deck,DeckAdapter.DeckH
                     {
                         clickListener.onItemClick(getSnapshots().getSnapshot(position), position);
                     }
-					Intent intent = new Intent(context, StudyActivity.class);
-                    intent.putExtra("deckID","1");
-                    context.startActivity(intent);
-                    // should show up when study is finished
-                    Toast.makeText(context, "Study finished!", Toast.LENGTH_SHORT).show();
                 }
             });
             itemView.setOnLongClickListener(new View.OnLongClickListener() {

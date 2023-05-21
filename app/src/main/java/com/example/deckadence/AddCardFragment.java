@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,11 +84,18 @@ public class AddCardFragment extends Fragment {
         addCardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Flashcard card = new Flashcard(answerEditText.getText().toString(), questionEditText.getText().toString());
+                Flashcard card = new Flashcard(answerEditText.getText().toString(), questionEditText.getText().toString(), 0);
                 fb.addCard(card, deckID);
                 answerEditText.getText().clear();
                 questionEditText.getText().clear();
                 Toast.makeText(getContext(), "Added card", Toast.LENGTH_SHORT).show();
+                // back to deck view otherwise things break
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                DecksFragment fragment = new DecksFragment();
+                fragmentTransaction.hide(AddCardFragment.this);
+                fragmentTransaction.add(android.R.id.content, fragment);
+                fragmentTransaction.commit();
             }
         });
     }

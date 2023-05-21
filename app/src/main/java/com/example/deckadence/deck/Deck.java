@@ -18,25 +18,25 @@ public class Deck {
         this.description = description;
         this.token = token;
         this.date = new Date().toString().substring(0,10);
-        cardPointer = 0;
     }
 
     public String getTitle() {
         return title;
     }
-
     public String getDescription() {
         return description;
     }
-
     public String getDate(){
         return date;
     }
     public String getToken() {
         return token;
     }
-    public void setTitle(String name) {
-        this.title = name;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
     public void setToken(String token) {
         this.token = token;

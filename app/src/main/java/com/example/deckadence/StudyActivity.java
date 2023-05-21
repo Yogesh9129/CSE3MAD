@@ -4,48 +4,52 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.deckadence.deck.Deck;
 import com.example.deckadence.deck.Flashcard;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 public class StudyActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseHelper fh;
+    private FirebaseHelper fb;
     private TextView question;
     private TextView answer;
     private Button revealButton;
     private Button againButton;
     private Button goodButton;
     private Button easyButton;
-    private Deck deck;
+    private int cardPointer;
     private Flashcard currentCard;
+    private ArrayList<Flashcard> cards;
+    private ArrayList<String> cardIDs;
+    private String deckID;
+    boolean waiting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study);
-        fh = new FirebaseHelper(db);
+        fb = new FirebaseHelper(db);
         Intent intent = getIntent();
-        String deckID = intent.getStringExtra("deckID");
-        // get the currently studied deck here
-        // also get the current card too
-        String[] deckInfo = fh.getDeckInfo(deckID);
-        deck = new Deck(deckInfo[0]);
-        Flashcard[] cards = fh.getDeckCards(deckID);
-        deck.addCards(cards);
-        currentCard = deck.getNextCard();
+        deckID = intent.getStringExtra("deckID");
+        cards = fb.getCards(deckID);
+        cardIDs = fb.getCardIds(deckID);
+        cardPointer = 0;
+        waiting = true;
         setupLayout();
     }
     private void setupLayout() {
         question = (TextView) findViewById(R.id.question_text);
-        question.setText(currentCard.getQuestion());
+        question.setText(R.string.waiting);
         answer = (TextView) findViewById(R.id.answer_text);
-        answer.setText(currentCard.getAnswer());
         answer.setVisibility(View.INVISIBLE);
         revealButton = (Button) findViewById(R.id.reveal_button);
         againButton = (Button) findViewById(R.id.again_button);
@@ -83,13 +87,29 @@ public class StudyActivity extends AppCompatActivity {
                 hideButtons();
             }
         });
+        currentCard = new Flashcard((String) question.getText(),"",0);
+        question.setText(currentCard.getQuestion());
+        answer.setText(currentCard.getAnswer());
     }
-    private void answerCard(int exp) {
+    private void answerCard(long exp) {
         // note, finish when deck is exhausted
         currentCard.answered(exp);
-        currentCard = deck.getNextCard();
-        if(currentCard == null) {
-            finish();
+        //not for the first card
+        if(!waiting) {
+            fb.updateCard(deckID, cardIDs.get(cardPointer), currentCard);
+            if (cardPointer < cards.size()) {
+                Log.d("DEBUG","cardpointer:" +  cardPointer);
+                Log.d("DEBUG","cards.size():" +  cards.size());
+                currentCard = cards.get(cardPointer);
+                cardPointer++;
+            } else {
+                Log.d("DEBUG","finished study");
+                finish();
+            }
+        } else {
+            currentCard = cards.get(cardPointer);
+            cardPointer++;
+            waiting = false;
         }
         question.setText(currentCard.getQuestion());
         answer.setText(currentCard.getAnswer());
