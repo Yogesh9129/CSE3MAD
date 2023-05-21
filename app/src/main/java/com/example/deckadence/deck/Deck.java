@@ -4,18 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Deck {
-    private ArrayList<Flashcard> cards;
     private String title;
-    private Date date;
+    // has to be a string for firestore reasons
+    private String date;
     private String token;
     private String description;
+    public Deck() {
+        // empty constructor for firebase
+    }
     public Deck(String title, String description, String token) {
         this.title = title;
         this.description = description;
-        cards = new ArrayList<>();
-        date = new Date();
         this.token = token;
-
+        this.date = new Date().toString().substring(0,10);
     }
 
     public String getTitle() {
@@ -25,7 +26,8 @@ public class Deck {
     public String getDescription() {
         return description;
     }
-    public Date getLastStudiedDate(){
+
+    public String getDate(){
         return date;
     }
     public String getToken() {
@@ -37,33 +39,7 @@ public class Deck {
     public void setToken(String token) {
         this.token = token;
     }
-    public void setLastStudiedDate(Date date){
-        this.date = date;
-    }
-
-    public void addCard(Flashcard card) {
-        cards.add(card);
-    }
-
-    public void removeCard(Flashcard card) {
-        cards.remove(card); // might be worth checking if the card was removed or not
-    }
-
-    public Flashcard getCardByQuestion(String question) {
-        for (Flashcard card: cards) {
-            if(card.getQuestion().equals(question)) {
-                return card;
-            }
-        }
-        return null; // null if no card is found
-    }
-
-    public Flashcard getCardByAnswer(String answer) {
-        for (Flashcard card: cards) {
-            if(card.getAnswer().equals(answer)) {
-                return card;
-            }
-        }
-        return null; // null if no card is found
+    public void setDate(String date){
+       this.date = date;
     }
 }

@@ -24,7 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class MainActivity extends AppCompatActivity implements AddFragment.GoogleSignInInterface {
+public class MainActivity extends AppCompatActivity implements AddFragment.GoogleSignInInterface, DecksFragment.GoogleSignInInterface {
 
     private FirebaseFirestore db;
     private boolean loggedIn;
@@ -33,15 +33,10 @@ public class MainActivity extends AppCompatActivity implements AddFragment.Googl
     private Button decksButton;
     private Button addButton;
     private FragmentManager fragmentManager;
-
-
-
-
-        @Override
-        public GoogleSignInAccount getGoogleSignIn() {
-
-            return account;
-        }
+    @Override
+    public GoogleSignInAccount getGoogleSignIn() {
+        return account;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +44,15 @@ public class MainActivity extends AppCompatActivity implements AddFragment.Googl
         account = GoogleSignIn.getLastSignedInAccount(this);
         if(account != null) Log.d("DEBUG", account.getGivenName());
         db = FirebaseFirestore.getInstance();
+        FirebaseHelper fb = new FirebaseHelper(db);
         loggedIn = (account != null);
         if(!loggedIn) { // also check for internet maybe
             MainActivity.this.startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }
-        getDecksByID(); //debug method for getting decks by id
+        //getDecksByID(); //debug method for getting decks by id
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
+        //fb.getCards("sample");
         layoutSetup();
     }
 

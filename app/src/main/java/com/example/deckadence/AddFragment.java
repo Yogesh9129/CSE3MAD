@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.deckadence.deck.Deck;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -67,7 +68,7 @@ public class AddFragment extends Fragment {
         return fragment;
     }
 
-    //interface used for getting the user of the current google account (autehnticated user)
+    //interface used for getting the user of the current google account (authenticated user)
 
     @Override
     public void onAttach(Context context) {
@@ -79,22 +80,15 @@ public class AddFragment extends Fragment {
                     + " must implement GoogleSignInInterface");
         }
     }
-/*
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onCreateView(getLayoutInflater(), (ViewGroup) view, savedInstanceState);
-
-        setupLayout();
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
     }
-*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -105,31 +99,26 @@ public class AddFragment extends Fragment {
         fb = new FirebaseHelper(db);
 
         view = inflater.inflate(R.layout.fragment_add, container, false);
-
-        titleEditText =  (EditText) view.findViewById(R.id.add_title);
-        descriptionEditText = (EditText) view.findViewById(R.id.add_description);
-        addDeckButton = (Button) view.findViewById(R.id.add_deck);
-
         setupLayout();
 
         return view;
     }
 
     private void setupLayout() {
-
+        titleEditText =  (EditText) view.findViewById(R.id.add_title);
+        descriptionEditText = (EditText) view.findViewById(R.id.add_description);
+        addDeckButton = (Button) view.findViewById(R.id.add_deck);
         addDeckButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 GoogleSignInAccount googleSignInAccount = googleSignInInterface.getGoogleSignIn();
-
-                Deck d = new Deck(titleEditText.getText().toString(), descriptionEditText.getText().toString(), googleSignInAccount.getId().toString());
-
+                Deck d = new Deck(titleEditText.getText().toString(), descriptionEditText.getText().toString(), googleSignInAccount.getId());
                 fb.addDeck(d);
-
-
-                Log.d("DEBUG", d.toString());
-                Boolean hasDecks = false;
+                Toast.makeText(getContext(), "Deck Added", Toast.LENGTH_SHORT).show();
+                titleEditText.getText().clear();
+                descriptionEditText.getText().clear();
+                //Boolean hasDecks = false;
                 //Intent addInt = new Intent(getActivity().getApplicationContext(), com.example.deckadence.deck.Deck.class);
                 //startActivity(addInt);
             }

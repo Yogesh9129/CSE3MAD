@@ -15,7 +15,9 @@ public class Flashcard {
         }
         int getFactor() {return factor;}
     }
-
+    public Flashcard() {
+        // empty constructor for firebase
+    }
     public Flashcard(String question, String answer) {
         this.question = question;
         this.answer = answer;
@@ -32,6 +34,14 @@ public class Flashcard {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
     }
 
     public String getAnswer() {
