@@ -14,47 +14,60 @@
             android:id="@+id/titleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/purple_500"
             android:text="@string/title_home"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+            android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="1dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="Button"
+            android:id="@+id/signBtn"
+            android:layout_width="155dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="Account"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titleBar" />
 
         <RelativeLayout
             android:layout_width="411dp"
             android:layout_height="340dp"
+            android:layout_marginTop="75dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button">
+            app:layout_constraintTop_toBottomOf="@+id/signBtn">
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="232dp"
-                android:src="@drawable/q_a" />
-
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <Button
+                android:id="@+id/allDecks"
+                android:layout_width="377dp"
+                android:layout_height="132dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="62dp"
-                android:src="@drawable/q_a" />
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:text="All Decks" />
+
+            <Button
+                android:id="@+id/savedDecks"
+                android:layout_width="363dp"
+                android:layout_height="82dp"
+                android:layout_below="@+id/allDecks"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="75dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="0dp"
+                android:text="Saved Decks" />
 
         </RelativeLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

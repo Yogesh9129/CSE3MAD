@@ -1,12 +1,20 @@
 package com.example.deckadence;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +22,12 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
+
+    GoogleSignInOptions googleSignInOptions;
+    GoogleSignInClient googleSignInClient;
+    Button savedDecks, allDecks;
+    Button signOutButton;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,6 +74,55 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+       signOutButton = (Button) view.findViewById(R.id.signBtn);
+       savedDecks = (Button) view.findViewById(R.id.savedDecks);
+       allDecks = (Button) view.findViewById(R.id.allDecks);
+       // SignOut();
+
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        HomeFragment.this.startActivity(new Intent(getActivity().getApplicationContext(), LoginActivity.class));
+                    }
+                });*/
+                HomeFragment.this.startActivity(new Intent(getActivity().getApplicationContext(), LoginActivity.class));
+            }
+        });
+
+        savedDecks.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                HomeFragment.this.startActivity(new Intent(getActivity().getApplicationContext(), AddFragment.class));
+            }
+        });
+
+        allDecks.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                HomeFragment.this.startActivity(new Intent(getActivity().getApplicationContext(), AddFragment.class));
+            }
+        });
         return view;
+    }
+
+    private void SignOut() {
+
+        /*signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // HomeFragment.this.startActivity(new Intent(getActivity().getApplicationContext(), LoginActivity.class));
+                    }
+                });
+
+            }
+        });*/
+
+
     }
 }

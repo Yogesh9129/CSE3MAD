@@ -5,24 +5,31 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class Deck {
-    private ArrayList<Flashcard> cards;
     private String title;
-    private Date date;
+    // has to be a string for firestore reasons
+    private String date;
     private String token;
-    private int cardPointer;
-
-    public Deck(String title) {
+    private String description;
+    public Deck() {
+        // empty constructor for firebase
+    }
+    public Deck(String title, String description, String token) {
         this.title = title;
-        cards = new ArrayList<>();
-        date = new Date();
-        token = "";
+        this.description = description;
+        this.token = token;
+        this.date = new Date().toString().substring(0,10);
         cardPointer = 0;
     }
 
     public String getTitle() {
         return title;
     }
-    public Date getLastStudiedDate(){
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getDate(){
         return date;
     }
     public String getToken() {
@@ -34,42 +41,7 @@ public class Deck {
     public void setToken(String token) {
         this.token = token;
     }
-    public void setLastStudiedDate(Date date){
-        this.date = date;
-    }
-    public void addCard(Flashcard card) {
-        cards.add(card);
-    }
-    public void removeCard(Flashcard card) {
-        cards.remove(card); // might be worth checking if the card was removed or not
-    }
-    public void addCards(Flashcard[] cardArray) {
-        cards.addAll(Arrays.asList(cardArray));
-    }
-    public int getCardCount() {
-        return cards.size();
-    }
-    public Flashcard getNextCard() {
-        Flashcard card = cards.get(cardPointer);
-        cardPointer++;
-        return card;
-    }
-    // functions for card searching
-    public Flashcard getCardByQuestion(String question) {
-        for (Flashcard card: cards) {
-            if(card.getQuestion().equals(question)) {
-                return card;
-            }
-        }
-        return null; // null if no card is found
-    }
-
-    public Flashcard getCardByAnswer(String answer) {
-        for (Flashcard card: cards) {
-            if(card.getAnswer().equals(answer)) {
-                return card;
-            }
-        }
-        return null; // null if no card is found
+    public void setDate(String date){
+       this.date = date;
     }
 }

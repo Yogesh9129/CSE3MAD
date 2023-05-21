@@ -12,8 +12,15 @@
     <string name="title_decks">Decks</string>
     <string name="title_add">Add</string>
     <string name="last_studied">Last Studied:</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="add_deck">Add Deck</string>
+    <string name="dekedence_logo">dekedence_logo</string>
     <string name="reveal_answer">Reveal Answer</string>
     <string name="again_answer">Again</string>
     <string name="good_answer">Good</string>
     <string name="easy_answer">Easy</string>
+    <string name="add_card">Add Card</string>
+    <string name="answer">Answer</string>
+    <string name="question">Question</string>
 </resources>

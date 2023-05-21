@@ -1,26 +1,33 @@
 package com.example.deckadence;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.deckadence.deck.Deck;
 import com.example.deckadence.deck.DeckAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -42,11 +49,11 @@ public class DecksFragment extends Fragment {
     private String mParam2;
 
     private FirebaseAnalytics mFirebaseAnalytics;
-    private View view;
     private DeckAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference deckRef = db.collection("Decks");
     private GoogleSignInAccount account;
+    private DecksFragment.GoogleSignInInterface googleSignInInterface;
 
     public DecksFragment() {
         // Required empty public constructor
@@ -71,6 +78,17 @@ public class DecksFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            googleSignInInterface = (GoogleSignInInterface) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement GoogleSignInInterface");
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -83,27 +101,34 @@ public class DecksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_decks, container, false);
-        setUpRecyclerView();
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
-        return view;
+        return inflater.inflate(R.layout.fragment_decks, container, false);
     }
 
-    private void setUpRecyclerView() {
-        account = GoogleSignIn.getLastSignedInAccount(getActivity());
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setUpRecyclerView(view);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+    }
+
+    private void setUpRecyclerView(View view) {
+        account = googleSignInInterface.getGoogleSignIn();
         String token = "";
         try {
-            token = account.getIdToken();
+            token = account.getId();
         } catch (NullPointerException e) {
             // suppress
         }
-        Query query = db.collection("Deck").whereEqualTo("token", token).orderBy("Title", Query.Direction.ASCENDING);
+        Log.d(TAG,"token: "+ token);
+        Query query = db.collection("Deck").whereEqualTo("token",token).orderBy("title", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Deck> options = new FirestoreRecyclerOptions.Builder<Deck>()
                 .setQuery(query, Deck.class)
                 .build();
-        adapter = new DeckAdapter(options, getContext());
+        adapter = new DeckAdapter(options);
+        Log.d(TAG,"new adapter");
         RecyclerView recyclerView = view.findViewById(R.id.rec_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         Log.d(TAG,"recycler working");
         //note as we are not using up and down gestures the first argument is 0
@@ -116,9 +141,47 @@ public class DecksFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                // not doing anything here, other ways to delete
+                adapter.deleteItem(viewHolder.getBindingAdapterPosition());
+                Toast.makeText(getContext(), "Deck deleted", Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(recyclerView);
+        adapter.setOnItemClickListener(new DeckAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID,"0");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "deck_card");
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "deck");
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle);
+            }
+        });
+        adapter.setOnItemLongClickListener(new DeckAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(DocumentSnapshot documentSnapshot, int position) {
+                PopupMenu popupMenu = new PopupMenu(getContext(),recyclerView);
+                popupMenu.getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        Bundle bundle = new Bundle();
+                        String deckID = documentSnapshot.getId();
+                        bundle.putString("DECK_ID", deckID);
+
+                        FragmentManager fragmentManager = getParentFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        AddCardFragment fragment = new AddCardFragment();
+                        fragment.setArguments(bundle);
+                        fragmentTransaction.addToBackStack("xyz");
+                        fragmentTransaction.hide(DecksFragment.this);
+                        fragmentTransaction.add(android.R.id.content, fragment);
+                        fragmentTransaction.commit();
+                        return false;
+                    }
+                });
+                // Showing the popup menu
+                popupMenu.show();
+            }
+        });
     }
 
     @Override
@@ -132,5 +195,9 @@ public class DecksFragment extends Fragment {
     public void onStop() {
         super.onStop(); // call superclass method before anything else
         adapter.stopListening();
+    }
+
+    public interface GoogleSignInInterface {
+        GoogleSignInAccount getGoogleSignIn();
     }
 }
