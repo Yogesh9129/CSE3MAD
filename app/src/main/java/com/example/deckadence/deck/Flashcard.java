@@ -33,7 +33,7 @@ public class Flashcard {
         return experience;
     }
 
-    public void setExperience(int experience) {
+    public void setExperience(long experience) {
         this.experience = experience;
     }
 
