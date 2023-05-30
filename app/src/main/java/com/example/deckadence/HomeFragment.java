@@ -6,15 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.deckadence.deck.DeckAdapter;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +28,15 @@ public class HomeFragment extends Fragment {
     GoogleSignInClient googleSignInClient;
     Button savedDecks, allDecks;
     Button signOutButton;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+    private DeckAdapter adapter;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference deckRef = db.collection("Decks");
+    private GoogleSignInAccount account;
+    private View view;
+    private DecksFragment.GoogleSignInInterface googleSignInInterface;
+    private static final String TAG = "home";
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -75,7 +85,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
        signOutButton = (Button) view.findViewById(R.id.signBtn);
-       savedDecks = (Button) view.findViewById(R.id.savedDecks);
+       savedDecks = (Button) view.findViewById(R.id.lastDeck);
        allDecks = (Button) view.findViewById(R.id.allDecks);
        // SignOut();
 
@@ -95,34 +105,21 @@ public class HomeFragment extends Fragment {
         savedDecks.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                HomeFragment.this.startActivity(new Intent(getActivity().getApplicationContext(), AddFragment.class));
+                //HomeFragment.this.startActivity(new Intent(getActivity().getApplicationContext(), AddFragment.class));
             }
         });
 
         allDecks.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                HomeFragment.this.startActivity(new Intent(getActivity().getApplicationContext(), AddFragment.class));
+                //HomeFragment.this.startActivity(new Intent(getActivity().getApplicationContext(), DecksFragment.class));
+                //setUpRecyclerView();
+                //mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
             }
         });
         return view;
     }
 
-    private void SignOut() {
-
-        /*signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // HomeFragment.this.startActivity(new Intent(getActivity().getApplicationContext(), LoginActivity.class));
-                    }
-                });
-
-            }
-        });*/
 
 
-    }
 }
